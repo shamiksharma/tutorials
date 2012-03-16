@@ -1,3 +1,12 @@
+Install
+--
+
+- Just checkout the git repos
+  git@github.com:shamiksharma/tutorials.git
+
+- Install sencha2 somewhere
+  
+
 Todo
 + Sample app
 + Structuring with MVC architecture
