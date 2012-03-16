@@ -1,0 +1,43 @@
+
+http://www.sencha.com/forum/archive/index.php/t-102763.html
+
+Here is the list for those who don't want to look it up. It would be nice if this would be in the documentation if it is not already.
+
+action
+add
+arrow_up
+arrow_right
+arrow_down
+arrow_left
+bookmarks
+compose
+delete
+download
+favorites
+info
+more
+refresh
+reply
+search
+settings
+star
+team
+time
+trash
+user
+existdissolve
+
+--------
+
+The icons that LuckyWolf19 listed are the ones that are available by default. There are, however, a *ton* more available to the default theme, if you're willing to add them in to a custom stylesheet via SASS. At first, it seems a bit daunting if you've never done it before, but if you're serious about customizing your Sencha theme, this is something you're probably going to be needing to get into anyway.
+
+Here's a good article on how to do that: 
+http://www.sencha.com/blog/an-introduction-to-theming-sencha-touch
+
+-----
+
+And you can browse to the full collection of masks in your sencha installation--just browse to
+
+\resources\themes\images\default\pictos
+
+----
