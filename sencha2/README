@@ -2,29 +2,44 @@ Install
 --
 
 - Just checkout the git repos of tutorials
-  % git@github.com:shamiksharma/tutorials.git
 
-- Install sencha2 somewhere 
+  % git clone git@github.com:shamiksharma/tutorials.git
+
+- Install sencha2 somewhere  (e.g. in ~/tools/sencha-touch-2.0.0-commercial)
+
   http://www.sencha.com/products/sdk-tools/download
+
   This will create a directory called sencha-touch-2.0.0-commercial/
   with subdirs like src, examples etc.
   
-- Create a link to the sdk in your sencha2 workdir
+- In each app, the index.html expects the sencha2 sdk in a local ./sdk directory,
+  So create a link in each app to the shared sencha2sdk. I do 
+  this by first creating a top-level link and then linking to it.
+  (The sencha2sdk and these links are not checked into the repos)
+
   % cd tutorials/sencha2
-  % ln -s path/to/dowloaded/sencha-touch  sdk
- 
-- 
+  % ln -s /path/to/sencha-touch-2.0.0-commercial/  sencha2sdk
+
+  % ln -s sencha2sdk  firstapp/sdk     #repeat for each appdir
 
 
+- To run any app (except helloworld.html), you can start a local server
   
+  % cd tutorials/sencha2/firstapp
+  % python -m SimpleHTTPServer
+ 
+
+- Open a browser and goto  http://localhost:8000/index.html
+
   
 
 Todo
+--
 + Sample app
 + Structuring with MVC architecture
 + Getting views working
-+ Google Maps
-- Using controllers and to tie things together
++ Google Maps page.
+- Using controllers to tie things together
 - load data from a local json file
 - Using ajax to load data from apis
 - Connecting with a real server

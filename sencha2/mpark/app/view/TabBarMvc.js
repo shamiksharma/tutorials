@@ -1,13 +1,13 @@
 /**
 * Script name:	TabBarMvc
-* 
+*
 * Description:	Custom Sencha Touch TabBar that works with a MVC structured application;
-* 				Full description can be found here:
-* 				http://www.onlinesolutionsdevelopment.com/blog/mobile-development/javascript/sencha-touch-tabbar-in-a-mvc-structured-application
-* 
+*			Full description can be found here:
+*			http://www.onlinesolutionsdevelopment.com/blog/mobile-development/javascript/sencha-touch-tabbar-in-a-mvc-structured-application
+*
 * Author:		CAM
 * Author URL:	http://www.onlinesolutionsdevelopment.com/blog
-* 
+*
 * Last modified date: October 8, 2011
 */
 
@@ -103,9 +103,8 @@ TabBarMvc = Ext.extend(Ext.TabBar, {
 	},
 	
 	setActiveTab: function(tab)
-	{ 
+	{
 		var tabs = this.query('.tab');
-	   
 		Ext.each(tabs, function(item, index){
 			item.removeCls('x-tab-active');
 		}, this);

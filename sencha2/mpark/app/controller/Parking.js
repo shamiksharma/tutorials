@@ -1,15 +1,25 @@
-Ext.define('MP.controller.Actions', {
+Ext.define('MP.controller.Parking', {
     extend: 'Ext.app.Controller',
     requires: ['Ext.MessageBox'],
 
     config: {
+        refs: {
+            logout: '#logoutButton',
+            find: '#findButton',
+            back: '#backButton',
+            panel: '#mypanel',
+            mappanel: '#mappanel'
+        },
         control: {
-            '#signout': {
-                tap: 'onUserTap'
+            logout : {
+                tap: 'doLogout'
             },
-            '#logoutButton': {
-                tap: 'logout'
+            find : {
+                tap: 'doFind'
             }
+        },
+        routes: {
+
         }
     },
 
@@ -30,6 +40,19 @@ Ext.define('MP.controller.Actions', {
     },
 
     addParking: function() {
+    },
+
+    testAction: function() {
+        alert('from controller');
+    },
+
+    doFind: function() {
+        this.getBack().show();
+        console.log('showed back');
+        var mappanel = this.getMappanel();
+        console.log('got map panel');
+        this.getPanel().setActiveItem(mappanel);
+        console.log('set active item');
     }
 
 });

@@ -1,62 +1,48 @@
-/**
- * This screen is displayed once a user has logged in to Facebook and authorized our app.
- */
+
 Ext.define('MP.view.Main', {
     extend: 'Ext.Panel',
-    alias: 'widget.mainview',
-    xtype: 'mainview',
-    layout: 'vbox',
 
+    requires: [
+        'MP.view.Find',
+        'MP.view.List',
+        'MP.view.Map'
+    ],
 
-    config: {
-        layout: 'card',
+    config : {
+        fullscreen: true,
+        layout:'card',
 
-        items: [
+        items : [
             {
-                title: 'Contact',
-                iconCls: 'user',
-                xtype: 'formpanel',
-                url: 'contact.php',
-                layout: 'vbox',
-
+                xtype: 'toolbar',
+                docked: 'top',
+                title: 'Mango Parking',
+          
                 items: [
                     {
-                        xtype: 'fieldset',
-                        //title: 'Contact Us',
-                        instructions: '(Leave empty to use GPS)',
-                        items: [
-                            {
-                                xtype: 'textfield',
-                                label: 'Location'
-                            }
-                        ]
-                    },
-                    {
                         xtype: 'button',
-                        text: 'Find Parking',
-                        ui: 'confirm',
-                        handler: function() {
-                            this.up('formpanel').submit();
-                        }
-                    },
-                    {
-                        title: 'Home',
-                        iconCls: 'home',
-                        cls: 'home',
-
-                        html: [
-                            //'<img src="http://staging.sencha.com/img/sencha.png" />',
-                            '<h1>Welcome to Main view</h1>'
-                        ].join("")
+                        text: 'Back',
+                        ui: 'back',
+                        id: 'backButton',
+                        hidden:'true'
                     }
+                ]
+           
+            },
+            // Second docked  toolbar
+     
+            {
+                xtype:'tabpanel',    // Not tabbar, that is sencha internal
+                id : 'mypanel',
+                tabBarPosition:'bottom',
+                layout: {pack:'left'},   // doesnt work
+                items: [
+                    { title: 'Find', iconCls: 'search',    xtype: 'findview', id:'findpanel'},
+                    { title: 'List', iconCls: 'info',      xtype: 'listview', id:'listpanel'},
+                    { title: 'Map',  iconCls: 'bookmarks', xtype: 'mapview' , id:'mappanel'}
                 ]
             }
         ]
-    },
-
-    initialize: function() {
-        console.log('initialize main view');
-        this.callParent();
     }
-    
 });
+
