@@ -1,0 +1,104 @@
+
+Selectors
+-------------
+You can select a set of elements by using
+  jQuery(selector-string)    # e.g.  jQuery("classA")
+
+or by using its shorthand
+  $("classA")
+
+These selections return an array of DOM elements, to which
+either jQuery or standard javascript functions can be applied.
+
+$(selector).function()       
+  # select some elements and iterate over them applying function.
+
+Functions return the same array of elements as they were applied
+to, thus they can be chained.
+
+$(selector).foo().bar()      
+  # select elementlist L, apply foo, return L, apply bar.
+
+$("div.classA").fadeOut().addClass("classB");
+  # all divs that have classA, fade them out, them apply classB
+
+More Selectors
+--------------
+
+$("#someElement").html("Added some text");   
+$("p:even");     # every even p element
+$("tr:nth-child(1)");  # first row of each table
+$("body > div");       # divs that are directly under body
+$("a[href$=pdf]");     # any links to pdfs
+$("body > div:has(a)") # divs directly under body that have links
+$("table tr:nth-child(even)").addClass("striped"); 
+
+Utility Functions
+-----------------
+When no selector is specified, the function is a static utility function.
+
+str  = jQuery.trim("trailing-space ");  
+str  = $.trim("trailing-space ");  
+
+
+
+Document READY  vs  Window ONLOAD
+---------------------------------
+
+You cannot manipulate DOM elements before the DOM structure is ready.
+When the DOM tree structure is ready, browser fires off the 
+document.READY event.
+
+striper = function() { $("table tr:nth-child(even)").addClass("even"); };
+
+$(document).ready(striper);
+
+or, shortform:
+
+$(striper);    #  Call striper when document is ready
+
+Then the browser loads in all the resources into the DOM tree - this
+includes images, iframes etc. When the entire page has been loaded, 
+the browser fires the window.ONLOAD event
+
+window.onload = function() { striper(); };
+
+Usually, you want to run most of your DOM manipulations (apply css,
+insert elements etc.) after READY. You want to apply animations
+
+
+Extending jQuery
+----------------
+
+jQuery.fn.addText = function() {
+  # return the modified set, so it can be chained.
+  return this.each(
+    function() {
+       //do something with each matching element
+       this.html("add some text");
+    }
+  );
+}
+
+You can use it like this.
+$("div.classA").addText();
+
+
+Advanced Selectors
+------------------
+
+"E"          elements of type E
+"E F"        elements of type F that are under E
+"E>F"        elements of type F directly under E
+"E~F"        elements of type F preceded by sibling element E
+"E+F"        elements of type F directly preceded by sibling element E
+"E:has(F)"   elements of type E that have a descendent F
+"E.C"        elements of type E that are of class C
+".C"         any element of class C
+"*.C"        any element of class C
+"#I"         the element with id I
+"E[A]"       element of type E that has an attribute of type A
+"E[A=V]"     element of type E that has an attribute of type A whose value is V
+"E[A*=V]"    element of type E that has an attribute of type A whose value contains V
+
+ 
