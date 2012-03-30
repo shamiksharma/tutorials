@@ -16,6 +16,7 @@ Ext.define('MP.view.Find', {
                 title: 'Contact',
                 iconCls: 'user',
                 xtype: 'formpanel',
+                id:'myFindPanel',
                 url: 'contact.php',
                 layout: 'vbox',
 
@@ -27,7 +28,9 @@ Ext.define('MP.view.Find', {
                         items: [
                             {
                                 xtype: 'textfield',
-                                label: 'Location'
+                                name:'location',
+                                label: 'Location',
+                                id:'locationField'
                             }
                         ]
                     },
@@ -36,18 +39,9 @@ Ext.define('MP.view.Find', {
                         text: 'Find Parking',
                         id: 'findButton',
                         handler: function() {
-                            this.up('formpanel').submit();
+                            console.log('firing event')
+                            // this.getApplication().fireEvent('findEvent', "hello");
                         }
-                    },
-                    {
-                        title: 'Home',
-                        iconCls: 'home',
-                        cls: 'home',
-
-                        html: [
-                            //'<img src="http://staging.sencha.com/img/sencha.png" />',
-                            '<h1>Welcome to Find view</h1>'
-                        ].join("")
                     }
                 ]
             }
@@ -56,7 +50,5 @@ Ext.define('MP.view.Find', {
 
     initialize: function() {
         console.log('initialize find view');
-        this.callParent();
     }
-    
 });

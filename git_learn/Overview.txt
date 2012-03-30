@@ -1,0 +1,179 @@
+---
+Git has
+#1  a working-tree; the local directory in which you make your changes
+#2  a staging agrea; to which mods are "added" by git add
+#3  a repository; to which changes are committed. However, this is a local repo, not a shared one.
+#4  a remote repository; typically a shared common repos, by convention called ORIGIN
+
+Git is different in two major ways.
+
+1. Local repository vs. Remote repository
+-----------------------------------------
+Unlike traditional SCM, the "repository" to which you add/commit 
+is not a shared common repository for all developers. It is a local
+repository that sits on the developer's desktop.
+
+Git breaks committing and sharing into two separate steps.
+You add/commit changes to a local repository that lives on your own disk.
+You then pull/push these changes to a remote repos to share with others.
+
+This "two repository model" requires the developer to be aware of which
+repos a git command applies to.  For example, git diff shows the diff between 
+your working tree and your own repository, so it won't show you the diff 
+between your working file and the shared codebase.
+
+2. Rebasing
+-----------
+
+Rebasing is an advanced concept that you can choose to skip over to begin.
+
+Git supports traditional merging (% git merge). Traditional merges takes 
+the diff between two branches and mashes the entire diff as a single 
+commit into the destination branch.  This loses the history of all the 
+commits that were made in the source branch.
+
+Rebasing "replays" all the commits from the source branch into the destination branch.
+Of course, you might still have conflicts and need to resolve them by hand.
+But you can choose to skip specific commits when merging, and if you encounter
+a bug later, you can isolate the specific commit from the merge.
+
+---
+
+You also have the standard commands to get and put stuff to/from a repository
+Note that most of these commands operate on your own local repos and dont
+need a network connection. 
+
+1. Get code from an existing repos   
+% mkdir git-tutorial
+% cd git-tutorial  
+% git clone git@github.com:shamiksharma/git-tutorial.git
+
+2. Add/modify a file 
+% touch file1.py 
+% echo "# added comment"  >> file2.py  
+% git add .           # add changed files under the current-dir "." to staging area
+
+3. Commit all changes in the staging area to the repository
+% git commit -m "a message" 
+
+4. Check the status of files in staging and working-tree wrt. repos
+% git status          # this does not show status of files in remote repos
+
+5. Get a log of all commits    
+% git log     
+% git log -10 --oneline  # last 10 logs, one-lime summary for each
+ 
+6. Get a log of all commits for a file
+% git blame file1.py
+
+7. See the diffs 
+% git diff               # between file in workingtree and staging
+% git diff file1.py      # diffs for file
+
+8. Get stats of changes
+% git diff --stats  
+% git log --shortstats
+
+---
+Work with remote repository
+
+Creates a link from local repo to a remote repo, and names the link "origin"
+% git remote add origin git://github.com/shamiksharma/git-tutorial.git
+
+% git pull origin    # this grabs all changes for all branches.
+
+% git pull origin joe-feature-branch:my-local-branch  # pull from joe' feature branch on origin and merge into my-local-branch
+
+% git pull --rebase origin master  # pull from master branch and rebase into my main branch, instead of merging
+
+% git fetch origin master  (this gets the changes from remote but does not merge/rebase them - Q: where do they go?)
+
+Push all commits from my local repository to remote repos (origin) branch (master)
+% git push origin master
+
+---
+Undo adds (not yet committed)
+% git reset HEAD -- file1.py
+
+Remove a new file that was added but not committed
+% git rm --=cached
+
+Delete my workingtree file and get HEAD version
+% git checkout -- file1.py 
+
+---
+Move or remove file
+
+% git mv file1.py dir/file1.py
+% git rm -- file1.py
+% git rm -- olddir/
+% git commit -m "filestructure changes"
+---
+Working with branches
+
+% git branch -a    # show all branches
+% git branch       # show all local branches
+% git branch -r    # show all remote branches
+
+Create branch
+% git branch my-feature-branch HEAD    # just creates the branch, doesnt switch to it
+% git checkout my-feature-branch       # switch to my-feature-branch
+
+% git branch --track my-feature-branch HEAD    # default, git push updates branch in remoterepos.
+% git branch --no-track my-feature-branch HEAD # QQ: what is no-track?
+
+Change to a specific branch
+% git checkout staging-branch
+
+Delete branch
+% git branch -D feature-branch  
+
+---
+
+Merging
+% git checkout master
+% git merge --no-commit development   # merge changes from dev into master, but dont commit
+% git commit -m "merging dev branch into master"
+
+Rebasing
+% git checkout development
+% git rebase master            # Q: does this rebase dev to master, or vice-versa?
+% git reset --hard ORIG_HEAD   # undo rebase commits, revert back to head before rebase
+
+
+Misc
+----
+
+Put all files you want to keep out of scm in a .gitignore file at top-level
+% cat .gitignore
+*.swp
+*.pyc
+*.[ao]
+
+
+Tagging HEAD
+% git tag beta-1 HEAD~2   # tag two commits prior to HEAD as beta-1
+
+
+Complex Stuff
+--------------
+Make the master branch a tracking branch.
+
+Run these commands after you push to your remote repository for the first time if you want to set up your local branch as a tracking branch of the remote. As an example, here’s the workflow in a project of mine:
+
+prompt> git checkout origin/master 
+
+prompt> git branch -d master 
+ Deleted branch master (was d7c8880). 
+
+prompt> git checkout -b master
+ Switched to a new branch 'master'
+
+
+Open Questions
+---------------
+What is tracking branch ?
+What does rebase really do ?
+What is a fast-forward merge ?
+
+

@@ -1,0 +1,312 @@
+Core concepts
+- You can make any local dir a git repos (git init)
+- You have a local repos on your machine that you are adding/committing to. (git add, git commit)
+- Adding puts data into a staging area, Committing puts it into the repos. (git reset, git checkout)
+- Status and diff are relative to your own local repos (git diff, git status)
+- You can connect to a public repos later. Committing and Sharing are separate operations.
+
+- Sharing -...
+- Merging (ffwd merges, recursive merges, rebasing)
+
+------------
+
+mkdir git-tutorial
+cd git-tutorial
+git init
+
+touch README
+git add README
+git commit -m 'first commit'
+
+git remote add origin git@github.com:shamiksharma/git-tutorial.git
+git push -u origin master
+
+
+-------------
+To get an existing repos
+
+git clone  git@github.com:shamiksharma/git-tutorial.git
+
+-------------
+
+git commit -a -m "jlfjlds"
+
+Will not commit staged files that are already added
+but not new files/dir. Need to still do a git add /path/to/newfile
+
+-------------
+
+You did a git add, but now dont want to commit
+
+- It was a modification
+  git reset HEAD
+ 
+  “Change the index—the staging area—to the latest version of this file.”
+
+- It was a new file that I dont want anymore
+  git rm --cached
+
+  Normally, git rm is used to remove files from your repository, but adding the --cached 
+  option tells Git to leave your working tree alone.
+
+- You just want to forget about your changes 
+  git checkout -- somedir/somefile.py
+
+  Careful. git checkout happily removes all untracked changes from a file or directory. 
+  You can’t get those changes back if they were never tracked by Git
+
+-------------
+
+- git diff 
+
+  does diff between workdir and staging
+  How do I do a diff between staging and private repo
+  How do I do a diff between workingdir and private repo
+  diff between private and repo2
+
+------------
+
+-  git mv /path/file  /path/newfile
+-  git commit -m "messge.."
+
+% git mv readme.txt  docs/
+
+This is just like add
+
+------------
+
+To delete a file or dir
+
+% git rm -- oldfile.py
+% git rm -r -- oldir/
+% git commit -m "removing oldfile and oldir/"
+
+Before commiting, you can recove, by reseting the index, then checking out the
+previous version.
+
+% git reset HEAD -- old/   
+% git checkout -- old/
+
+-------------
+
+Sharing
+
+% git clone   (gets a remote repos and establishes connection)
+% git remote  (connects local repos to remote repos)
+
+Get changes from remote and merge them
+% git fetch <remote> <branch>   [ % git fetch origin master ]
+
+Get changes from remote, but rebase changes on top of them
+% git pull --rebase <remote>  <branch>  [% git pull --rebase origin master]
+
+-------------
+Branching
+
+% git branch <branch-name>    [ % git branch staging ]
+  - create a branch, dont switch to it.
+
+% git checkout <branch-name>  [ % git checkout staging ]
+  - switch to the brahcn
+
+% git checkout -b staging (creates and switches to a new branch)
+
+% git status
+   - will show the nrahce name
+
+% git branch staging2 staging   (create branch staging2 from staging)
+% git checkout staging2
+
+these commands will create a new local branch.
+How do we create a branch on origin ?
+
+
+Show all local branches
+% git branch  
+  master
+  feature/xyz
+  feature/foo
+
+
+Show all remote branches
+% git branch -r 
+  origin/master
+
+Show local and remote branches
+% git branch -a
+
+Show branches that have been merged and those not merged
+% git branch --merged
+% git branch --no-merged
+
+Show branches that have got a certain commit
+% git branch --contains <commit-id>
+
+Merge changes from dev branch into master branch
+% git checkout master
+% git merge --no-commit dev    [merge but dont commit. Look if things go well[
+
+If things look good merge and commit
+% git merge -m "my message" dev
+
+Deleting a branch (very cheap- a branch is just a ptr to a specific commitid)
+% git commit -d staging   (git will warn you if the branch hasn't been merged into current branch_
+% git commit -D staging   (this will bypass warning)
+
+-----------------------------
+Rebasing
+
+Merging takes all the diffs from dev branch and puts them as a single commit into master.
+
+Rebasing replays each single commit from the dev branch into master. This allows
+individual commits to be reverted from master later.
+
+git rebase requires a clean workingtree (no modified files). So do a git add/commit to
+make your tree clean. 
+
+% git status
+  On dev branch
+
+% git rebase master
+  this applies allthe changes from master as individual commits to dev.
+
+Undo a rebase after it completes
+% git reset --hard ORIG_HEAD    [ORIG_HEAD is a git magic keyword]
+
+------------
+
+Tracking branch
+
+Tracking branches store additional metadata information about the relationship between two branches. The most common tracking branch is a local branch that tracks a remote branch (something Git does for you by default). This additional information is used by other commands, such as git push and git status, to provide additional functionality.
+
+-------------
+
+Tagging
+
+Just like a commitid, but easier to read/remember.
+You cant add/commit to a tag, but you can create a branch from a tag.
+
+% git tag   
+  List all tags
+
+% git tag staging-feature-works
+
+% git tag tag-beta2  HEAD   (tag head as tag-beta2)
+% git tag tag-beta1  HEAD^  (tag next to last commit as tag-beta1)
+
+i--------------
+
+Get a specific branch from a remote repos
+
+git fetch <remote-repos>  master:remotes/origin/master
+
+remote repositories are also stored as read-only branches on 
+your filesystem. "git fetch" gets the changes from the remote
+repos and stores it on your local fs. You can then merge those
+repos into your repos with git merge if you wish. Or you can
+rebase to merge the changes
+
+git pull combines the fetch and merge into one command.
+
+
+-----------------
+
+Export a git repos to send to someone
+
+% git archive --output myproject.zip HEAD
+
+----------------
+To see all the changes to a specific file
+
+% git blame /pathto/file
+
+
+Or to specific linenumbers (10-20)
+
+% git blame -L 10,20 /pathto/file
+
+----------------
+
+Shows stats about the diffs between any two commits
+(files changed, inserts, deletes)
+
+% git diff --stat
+
+% git diff --stat  from-commit-id   to-commit-id
+
+% git diff --stat  HEAD~5  HEAD
+
+Also get stats in shorter format
+
+% git diff --shortstat  HEAD~5 HEAD
+% git diff --numstat  HEAD~5 HEAD
+
+You can also get stats on the log  data
+
+% git log --stat HEAD~10 HEAD
+
+
+
+Also get 
+
+
+
+
+----------------
+To revert one or more commits
+
+% git revert  <commitid>
+
+This backtracks the commit from the workingtree and from the repos
+Instead, you can just revert the change from the workingtree.
+
+% git revert -no-commit <commitid>  
+
+or shorter form -n,
+Best to revert a bunch of changes then commit all of them
+
+% git revert -n 3rewrqwe
+% git revert -n wrwqer
+% git commit -m "reverted 2 bad commits" 
+
+---------------
+Merging
+
+% git mergetool
+
+This shows the list of mergetools that this version of git can work with.
+On MacOS, you typically have  opendiff and vimdiff installed.
+
+Set opendiff as the default merge tool.
+
+% git config --global merge.tool "opendiff"
+
+
+TO merge
+
+% git merge <branchname>
+
+% git status
+
+# wqill show conflict file. Conflicts will be in <<<<  your prior code === code from branch >>>> 
+REsolve the conflict, then do % git add and % git commit
+
+
+
+
+
+----------------
+git log -10
+
+Shows last 10 commits
+
+git log -10 --oneline
+
+----------------
+
+General comments
+
+HEAD^^^ :  means three commits before head
+HEAD~4  :  means four commits before head
+ORIG_HEAD : means the head before a major set of changes (e.g. rebase)
+

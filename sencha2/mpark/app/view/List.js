@@ -25,7 +25,7 @@ Ext.define('MP.view.List', {
                         //'<img src="http://staging.sencha.com/img/sencha.png" />',
                         '<h1>Welcome to List view</h1>'
                     ].join("")
-            },
+            }
         ]
     }
 

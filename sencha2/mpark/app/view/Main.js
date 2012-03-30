@@ -16,7 +16,7 @@ Ext.define('MP.view.Main', {
             {
                 xtype: 'toolbar',
                 docked: 'top',
-                title: 'Mango Parking',
+                title: 'My Parking',
           
                 items: [
                     {

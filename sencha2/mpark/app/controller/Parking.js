@@ -24,6 +24,7 @@ Ext.define('MP.controller.Parking', {
     },
 
     init: function() {
+        this.getApplication().on({findEvent:this.testEvent,scope:this});
         //this.callParent();
         //Ext.getStore('Parking').on('load', this.onParkingLoad);
     },
@@ -42,17 +43,35 @@ Ext.define('MP.controller.Parking', {
     addParking: function() {
     },
 
+    testEvent: function(param) {
+        alert('test event : ' + param);
+    },
+
     testAction: function() {
         alert('from controller');
     },
 
     doFind: function() {
         this.getBack().show();
-        console.log('showed back');
+
+        var locationString;
+
+        var formPanel = Ext.getCmp('myFindPanel');
+        if (!formPanel) console.log("not found form panel");
+        var dict = formPanel.getValues();
+        if (!dict) console.log("not found dict of formPanel");
+        
+        locationString = dict['location'];
+
+        console.log('showed back: ' + locationString  );
+
+
+        /*
         var mappanel = this.getMappanel();
         console.log('got map panel');
         this.getPanel().setActiveItem(mappanel);
         console.log('set active item');
+        */
     }
 
 });
