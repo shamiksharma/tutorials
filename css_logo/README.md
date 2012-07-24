@@ -15,6 +15,7 @@ Some nice things about it.
 HAML > HTML
 ========
 The logo code is written in HAML and converted to html using
+More on HAML [here](http://haml.info/docs/yardoc/file.HAML_REFERENCE.html).
 
 % haml logo.haml > logo.html
 
