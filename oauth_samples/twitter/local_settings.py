@@ -1,0 +1,2 @@
+twitter_consumer_key="dKSDqSuoV2fZrR0m2vcA"
+twitter_consumer_secret="VqBka23WsFCRlp9GDWts5b1P9xeDRvLwLFMfRj4ElGo"
