@@ -1,10 +1,15 @@
+
+
 import settings
 import urlparse
-import oauth2 as oauth
 import time
 import pickle
 import os
 import webbrowser
+import sys
+
+sys.path.append("..")  # so that scripts can import ../oauth2 library
+import oauth2 as oauth
 
 consumer_key = settings.twitter_consumer_key
 consumer_secret = settings.twitter_consumer_secret
