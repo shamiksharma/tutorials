@@ -167,8 +167,6 @@ def main(argv=None):
   # to replace the email here with the appropriate email address that
   # you wish to access.
 
-  # myurl = "https://mail.google.com/mail/b/givity@gmail.com/imap/"
-
   myurl = "https://mail.google.com/mail/b/%s/imap/" %  user_email_address.strip()
 
   print myurl
@@ -196,15 +194,32 @@ def main(argv=None):
 
   gmbox = mboxes[mboxName]
   gmbox.process()
-  print "Messages : " 
-  print gmbox.getMessages()
+  messages = gmbox.getMessages();
+  lenx = len(messages)
+  print "Messages (%d) : " % lenx
+  print messages
+  print "...... "
+
   
-  for msg in gm.messages[0:2]:
-    message = gm.getMessage(mboxName, msg.uid)
+  for msgid, msg in messages.items():
+    message = gmbox.getMessage(msg.uid)
     print "Message : " 
     print message
     print "Body : " 
     print message.Body
+
+
+
+  print "Moving a message to INBOX"
+  msgId = None
+  while msgId not in messages.keys():
+    msgId = raw_input('Which UID to move ?')
+
+  print "Get Mesg"
+  msg = gmbox.getMessage(msgId)
+  print "Move message"
+  gm.moveMessage(msgId, mboxName, "INBOX")
+
 
 
 #-------------------------------------------

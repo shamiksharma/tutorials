@@ -4,13 +4,11 @@ from email.parser import HeaderParser
 
 #-------------------------------------------------
 
-
 class GAccount(object):
   
   def __init__(self, connection):
     self.server = connection
     self.mboxes = dict()
-    self.messages = list()
     return
 
   def getMboxes(self):
@@ -22,8 +20,15 @@ class GAccount(object):
         self.mboxes[name] = GMbox(self,name)
     return self.mboxes
 
-#-------------------------------------------------
+  def moveMessage(self, messageId, srcMboxName, destMboxName):
+    server = self.server
+    server.select(srcMboxName)
+    copyMessage = server.uid('COPY', messageId, destMboxName)
+    if (copyMessage[0] == 'OK'):
+       mov, data = server.uid('STORE', messageId, '+FLAGS', '(\Deleted)')
+       server.expunge()
 
+#-------------------------------------------------
 
 class GMessage(object):
 
@@ -44,6 +49,7 @@ class GMessage(object):
     str += "\nFrom: %s, \nSubject: %s \n}" % (self.From,self.Subject)
     return str
 
+
 #-------------------------------------------------
 
 class GMbox(object):
@@ -51,7 +57,7 @@ class GMbox(object):
   def __init__(self, account, name):
     self.account = account
     self.mboxName = name
-    self.messages = list()
+    self.messages = dict()
     self.loaded = False
 
   def getMessages (self, type=None, dates=(),  ):
@@ -69,6 +75,7 @@ class GMbox(object):
   def parseFlags(self, flags):
     return flags.split()  # Note that we don't remove the '\' from flags, just split by space
 
+
     
   def parseMetadata(self, entry):
     if(not getattr(self,'metadataExtracter',False) ):   #Lazy initiation of the parser
@@ -82,12 +89,17 @@ class GMbox(object):
     metadata = self.metadataExtracter.match(entry).groupdict() 
     metadata['flags'] = self.parseFlags(metadata['flags'])
     return metadata
+
+
     
   def parseHeaders(self,entry):
     if(not getattr(self,'headerParser',False) ):
-        self.headerParser = HeaderParser()  #See http://docs.python.org/library/email.parser.html#parser-class-api    
+        self.headerParser = HeaderParser()  
+        #See http://docs.python.org/library/email.parser.html#parser-class-api    
     headers = self.headerParser.parsestr(entry)
     return headers
+
+
 
   def process(self):
 
@@ -99,8 +111,10 @@ class GMbox(object):
         raise Exception, message
     
     typ, data = server.search(None, '(UNDELETED)')
+
     fetch_list = string.split(data[0])[-10:]
     # limit to N most recent messages in mailbox, this is where pagination should be implemented
+    
     fetch_list = ','.join(fetch_list)
     
     if(fetch_list):
@@ -122,15 +136,26 @@ class GMbox(object):
           if( 'Subject' in headers ):
               message.Subject = headers['Subject']
               
-          self.messages.append(message)
+          self.messages[message.uid]=message
 
     self.loaded = True
     print "Num messages = %s" % len(self.messages)
 
+
+
   def getMessage (self, uid):
-    self.account.server.select(self.mboxName)
-    status, data = self.server.uid('fetch',uid, 'RFC822')
+    server = self.account.server
+    server.select(self.mboxName)
     
+    try:
+      status, data = server.uid('fetch',uid, 'RFC822')
+    except:
+      print "Exception in user code:"
+      print '-'*60
+      traceback.print_exc(file=sys.stdout)
+
+    print "Status %s  \n Data: %s" % (status, data)
+
     messagePlainText = ''
     messageHTML = ''
 
@@ -143,30 +168,25 @@ class GMbox(object):
           if str(part.get_content_type()) == 'text/html':
             messageHTML = messageHTML + str(part.get_payload())
 
-
     #create new message object
-    message = GMessage()
-    
-    if(messageHTML != '' ):
-        message.Body = messageHTML
+    if self.messages.has_key(uid):
+      message = self.messages[uid]
     else:
-        message.Body = messagePlainText
-    if('Subject' in msg):
-        message.Subject = msg['Subject']
-    message.From = msg['From']
+      message = GMessage()
+      # message.From = msg['From']
+      message.uid = uid
+      message.mboxName = self.mboxName
+      # message.date = msg['Date']
+      self.messages[uid] = message
     
-    message.uid = uid
-    message.mboxName = self.mboxName
-    message.date = msg['Date']
+    message.Body = messagePlainText if (messageHTML == '') else messageHTML
+
+    #if('Subject' in msg):
+    #  message.Subject = msg['Subject']
+
     return message
 
 
-
 #------------------------------------------------------
 
-
-
-
-
-#------------------------------------------------------
 
