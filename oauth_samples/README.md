@@ -36,3 +36,20 @@ Note that the first time you run this,
 
 
 
+Notes:
+- Gmail needs a scope="https://mail.google.com/"  params to get req-token.
+  It needs the trailing backslash
+
+- http://developer.yahoo.com/oauth/guide/oauth-auth-flow.html
+  is a good illustration
+
+- http://nullinfo.wordpress.com/oauth-yahoo/
+  Breaks down the steps very well.
+
+
+You will need to pip install httplib2.
+Its easier to use than httplib2, but provides the same func.
+
+
+ALso look at :
+https://github.com/agildehaus/python-oauthmail

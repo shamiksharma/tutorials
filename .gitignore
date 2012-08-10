@@ -1,3 +1,4 @@
 sencha-sdk
 local-settings.py
 *.pyc
+python-oauthmail

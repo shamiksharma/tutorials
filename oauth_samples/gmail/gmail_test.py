@@ -205,8 +205,8 @@ def main(argv=None):
     message = gmbox.getMessage(msg.uid)
     print "Message : " 
     print message
-    print "Body : " 
-    print message.Body
+    # print "Body : " 
+    # print message.Body
 
 
 
